@@ -1,33 +1,40 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:root/data/const.dart';
 
-import '../components/const/data.dart';
+const storage = FlutterSecureStorage();
 
-final Dio dio = Dio();
+final Dio dio = Dio()
+..interceptors.add(CustomInterceptors())
+..options.baseUrl = baseURL;
 
-void dioInit() => dio.interceptors.add(CustomInterceptors());
+Future<void> setTokens({String? accessToken, String? refreshToken}) async {
+  if (accessToken != null) await storage.write(key: accessTokenKey, value: accessToken);
+  if (refreshToken != null) await storage.write(key: refreshTokenKey, value: refreshToken);
+}
+
+Future<void> removeTokens() async {
+  await storage.delete(key: accessTokenKey);
+  await storage.delete(key: refreshTokenKey);
+}
 
 class CustomInterceptors extends Interceptor {
-  //요청을 보낼때
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    debugPrint('[REQ] ${options.method} ${options.uri}');
+    debugPrint('[REQ] [${options.method}] ${options.uri}');
     return super.onRequest(options, handler);
   }
 
-  //요청을 받을때
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    debugPrint(
-        '[RES] [${response.requestOptions.method}] ${response.requestOptions.uri}');
+    debugPrint('[RES] [${response.requestOptions.method}] ${response.requestOptions.uri}');
     super.onResponse(response, handler);
   }
 
-  //에러가 발생했을 때
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
-    debugPrint(
-        '[ERR] [${err.requestOptions.method}] ${err.requestOptions.uri}');
+    debugPrint('[ERR] [${err.requestOptions.method}] ${err.requestOptions.uri}');
     final refreshToken = await storage.read(key: refreshTokenKey);
 
     if (refreshToken == null) {
@@ -38,10 +45,8 @@ class CustomInterceptors extends Interceptor {
     final isPathReFresh = err.requestOptions.path == '/auth/login';
 
     if (isStatusCode401 && !isPathReFresh) {
-      final Dio dio = Dio();
-
       try {
-        final resp = await dio.post('$baseURL/auth/refresh', data: {
+        final resp = await Dio().post('$baseURL/auth/refresh', data: {
           'refreshToken': refreshToken,
         });
 
@@ -57,8 +62,8 @@ class CustomInterceptors extends Interceptor {
 
         final response = await dio.fetch(options);
         return handler.resolve(response);
-      } on DioError catch (e) {
-        return handler.reject(e);
+      } on DioException catch (err) {
+        return handler.reject(err);
       }
     }
 

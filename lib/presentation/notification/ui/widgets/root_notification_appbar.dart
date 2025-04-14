@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:root/components/root_images.dart';
 
-import '../../root_colors.dart';
+import '../../../../components/root_colors.dart';
+import '../view/notification_generation_screen.dart';
 
 class RootNotificationAppBar extends StatelessWidget
     implements PreferredSizeWidget {
@@ -41,11 +42,19 @@ class RootNotificationAppBar extends StatelessWidget
           ),
           centerTitle: true,
           actions: [
-            Image.asset(
-              RootImages.plus,
-              width: 25.w,
-              height: 25.h,
-            )
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (_) => const NotificationGenerationScreen()),
+                );
+              },
+              icon: Image.asset(
+                RootImages.plus,
+                width: 25.w,
+                height: 25.h,
+              ),
+            ),
           ],
         ),
       ),

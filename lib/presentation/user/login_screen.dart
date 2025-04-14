@@ -7,6 +7,7 @@ import 'package:root/components/widgets/root_layout.dart';
 
 import '../../components/root_colors.dart';
 import '../../components/widgets/root_admin_tab.dart';
+import '../../components/widgets/root_tab.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -69,8 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
           onPressed: () async {
             // await login();
             Navigator.of(context).push(MaterialPageRoute(builder: (_) => const RootAdminTab()));
-            // Navigator.of(context)
-            //     .push(MaterialPageRoute(builder: (_) => const RootTab()));
+            // Navigator.of(context).push(MaterialPageRoute(builder: (_) => const RootTab()));
           },
           child: Text(
             '로그인',

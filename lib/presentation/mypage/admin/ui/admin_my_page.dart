@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:root/components/widgets/appbar/root_app_bar.dart';
 import 'package:root/components/widgets/root_layout.dart';
-import 'package:root/presentation/notification/ui/notification_management_screen.dart';
 
 import '../../../../components/root_colors.dart';
 import '../../../../components/root_images.dart';
+import '../../../notification/ui/view/notification_management_screen.dart';
 import '../../../user/login_screen.dart';
 
 class AdminMyPage extends StatefulWidget {

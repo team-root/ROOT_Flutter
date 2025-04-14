@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:root/components/root_images.dart';
-import 'package:root/presentation/notification/ui/check_notification_screen.dart';
+
+import '../../../presentation/notification/ui/view/check_notification_screen.dart';
 
 class RootMainAppBar extends StatelessWidget implements PreferredSizeWidget {
   const RootMainAppBar({super.key,});
